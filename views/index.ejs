@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Autos</title>
+    <!-- Custom fonts for this template-->
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Ruta al archivo CSS en la carpeta 'public' -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <!-- Formulario para agregar un auto -->
+        <div class="logo-container">
+            <img src="/images/compas.png" alt="Logo de la Empresa" class="company-logo">
+        </div>
+        
+        <div class="container-añadir">
+
+            <div style="display: flex; align-items: flex-start; margin-top: -10px;">
+                <img src="images/plus.png" alt="Logo de la Empresa" style="width: 59px; height: auto; margin-right: 5px; margin-top: -7px;">
+                <div>
+                    <h2 style="margin: 0; margin-top: 20px;">Añadir auto</h2>
+                </div>
+            </div> 
+
+            <form id="carForm">
+                <input type="text" id="brand" placeholder="Marca" required>
+                <input type="text" id="model" placeholder="Modelo" required>
+                <input type="text" id="year" placeholder="Año" required>
+                <input type="text" id="purchasePrice" placeholder="Precio de Compra" required>
+                <input type="text" id="miles" placeholder="Millas" required>
+                <textarea id="description" placeholder="Descripción"></textarea>              
+                <div class="date-input-wrapper">
+                    <img src="images/calendario.png" alt="Ícono de Calendario" class="date-icon">
+                    <input type="date" id="saleDateAdd" name="saleDateAdd">
+
+                </div>   
+                <input type="file" id="photo" accept="image/*">
+                <img id="photoPreview" src="" alt="Foto del Auto" style="display: none; width: 100px; height: auto;">
+                <button type="button" onclick="addCar()" class="guardar-auto-btn">Guardar Auto</button>
+            </form>
+        </div>
+    
+        <!-- Formulario para agregar gastos -->
+        <div class="form-section">
+
+            <div style="display: flex; align-items: flex-start; margin-top: 7px;">
+                <img src="images/reparar.png" alt="Logo de la Empresa" style="width: 50px; height: auto; margin-right: 10px;">
+                <div>
+                    <h2 style="margin: 0; margin-top: 12px;">Agregar gastos</h2>
+                </div>
+                
+            </div>
+
+            <form id="expenseForm">
+                <input type="number" id="expenseCarId" placeholder="ID del Auto" required>
+                <textarea id="expenseDescription" placeholder="Descripción del Gasto (ej. pintura:800, aceite:150)" required></textarea>
+                <button type="button" class="add-expense" onclick="addExpense()">Agregar Gasto</button>
+            </form>
+        </div>
+
+        <!-- Formulario para vender un auto -->
+        <div class="form-section">
+
+            <div style="display: flex; align-items: flex-start; margin-top: 7px;">
+                <img src="images/key.png" alt="Logo de la Empresa" style="width: 60px; height: auto; margin-right: 10px;">
+                <div>
+                    <h2 style="margin: 0; margin-top: 20px;">Vender auto</h2>
+                </div>
+                
+            </div>
+           
+            <form id="saleForm">
+                <input type="number" id="sellId" placeholder="ID del Auto" required>
+                <input type="number" id="salePrice" placeholder="Precio de Venta" required>
+                <div class="date-input-container">
+                    <div class="date-input-wrapper">
+                        <img src="images/calendario.png" alt="Ícono de Calendario" class="date-icon">
+                        <input type="date" id="saleDate" required>
+                    </div>
+                </div>                      
+                <button type="button" onclick="confirmSellCar()" class="vender-auto">Vender Auto</button>
+                <button type="button" onclick="showSoldCars()"class="details-sold-cars" >Historial de ventas</button>
+                <button type="button" onclick="generateInvoice()" class="generar-factura">Generar Factura</button> <!-- Botón Agregado -->
+            </form>
+            </div>
+               <!-- Formulario para vender un auto -->
+               <div class="form-section">
+               
+                <div style="display: flex; align-items: flex-start; margin-top: 7px;">
+                    <img src="images/progreso.png" alt="Logo de la Empresa" style="width: 68px; height: auto; margin-right: 10px;">
+                    <div>
+                        <h2 style="margin: 0; margin-top: 20px;">Estadisticas</h2>
+                    </div>
+                    
+                </div>
+
+                <form id="InventarioForm">
+                    <span class="inventario-label">Total de Activos</span>
+                    <input type="text" id="totalNeto" class="valor-nuevo" readonly>
+                    <span class="total-gain-label">Ganancia Total</span>
+                    <input type="text" id="totalGainInventory" readonly>
+                    <span class="total-loss-label">Pérdida Total</span>
+                    <input type="text" id="totalLossInventory" readonly>
+                    
+                </form>
+            </div>
+            <!-- Modal de Factura -->
+            <div id="invoiceModal" class="modal" style="display: none;">
+                <div class="modal-factura">
+                    <span class="close" onclick="closeInvoiceModal()">&times;</span>
+
+                    <div class="modal-header">
+                        <img src="images/trabajo.png" alt="Logo de la Empresa" class="modal-logo">
+                        <h2 class="modal-title">Inovice</h2>
+                    </div>
+
+
+
+                    
+                    <label for="languageSelector" style="font-size: 13px; font-weight: bold;">Seleccionar Idioma:</label>
+                    <select id="languageSelector" onchange="changeLanguage()">
+                        <option value="es">Español</option>
+                        <option value="en">Inglés</option>
+                    </select>
+
+                    <form id="invoiceForm">
+                        <input type="text" id="buyerName" placeholder="Nombre del Comprador" required>
+                        <input type="text" id="sellerName" placeholder="Nombre del Vendedor" required>
+                        <input type="text" id="brandd" placeholder="Marca" required> <!-- Marca -->
+                        <input type="text" id="modell" placeholder="Modelo" required> <!-- Modelo -->
+                        <input type="text" id="color" placeholder="Color" required>
+                        <input type="number" id="salePriceInvoice" placeholder="Precio de Venta" required>
+                        <input type="text" id="chassisNumber" placeholder="VIN del Auto" required>
+                        <input type="date" id="saleDateInovice" required>
+                        <label for="saleActFile">Acto de Venta:</label>
+                        <input type="file" id="saleActFile" accept="image/*" required>
+                        <button type="button" onclick="submitInvoice(event)">Guardar Factura</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tabla de Autos Disponibles -->
+            <div class="table table-striped table-dark">
+
+                <div style="display: flex; align-items: flex-start; margin-top: 7px;">
+                    <img src="images/searching.png" alt="Logo de la Empresa" style="width: 63px; height: auto; margin-right: 8px;">
+                    <div>
+                        <h2 style="margin: 0; margin-top: 27px;">Historial de autos</h2>
+                    </div>
+                </div>
+
+                <table id="carTable" class="table table-striped table-dark">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Año</th>
+                            <th>Precio de Compra</th>
+                            <th>Estatus</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los autos se llenarán aquí con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+                                                                                           
+        
+            <!-- Modal para detalles del auto -->
+            <div id="carModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Detalles del Auto</h2>
+                    <div id="modal-body">
+                        <!-- Los detalles del auto se llenarán aquí con JavaScript -->
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Modal de Error -->
+            <div id="errorModal" class="modal">
+                <div class="modal-error">
+                    <span class="close" onclick="closeErrorModal()">&times;</span>
+                    <div class="error-message">
+                        <img src="images/advertencia.png" alt="Logo de la Empresa" style="width: 45px; height: auto; scroll-margin-top: 8px;">
+                        <p id="errorMessage"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal para vehículos vendidos -->
+            <div id="soldCarsModal" class="modal">
+                <div class="sold-cars-modal-content">
+                    <span class="closeSold" onclick="closeSoldCarsModal()">&times;</span>
+            
+                
+                    <div class="modal-header">
+                        <img src="images/car.png" alt="Logo de la Empresa" class="modal-logo">
+                        <h3 class="modal-title">Historial de ventas</h3>
+
+                    </div>
+            
+                    <table id="soldCarsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Año</th>
+                                <th>Precio de Compra</th>
+                                <th>Precio a Superar</th>
+                                <th>Venta Final</th>
+                                <th>Fecha</th>
+                                <th>Ganancia/Pérdida</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Los vehículos vendidos se llenarán aquí con JavaScript -->
+                        </tbody>
+                    </table>
+            
+                        <!-- Contenedor para Ganancia Total -->
+                    <div class="total-gain-container">
+                        <span class="total-gain-label">Ganancia Total</span>
+                        <input type="text" id="totalGainSold" readonly>
+                    </div>
+            
+                        <!-- Contenedor para Pérdida Total -->
+                    <div class="total-loss-container">
+                        <span class="total-loss-label">Pérdida Total</span>
+                        <input type="text" id="totalLossSold" readonly>
+                    </div>
+
+                </div>
+            </div>
+            
+        
+            <!-- Modal de confirmación para la venta del auto -->
+            <div id="sellConfirmModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeSellConfirmModal()">&times;</span>
+                    <p id="sellConfirmMessage"></p>
+                    <button id="sellConfirmYesButton">Sí</button>
+                    <button id="sellConfirmNoButton">No</button>
+                </div>
+            </div>
+
+            <!-- Modal de Confirmación para eliminar un auto -->
+            <div id="confirmModal" class="modal">
+                <div class="modal-CONF">
+                    <span class="close" onclick="closeConfirmModal()">&times;</span>
+                    <p id="confirmMessage">¿Estás seguro de que deseas eliminar este auto?</p>
+                    <button id="confirmYesButton">Sí</button>
+                    <button id="confirmNoButton">Cancelar</button>
+                </div>
+            </div>
+
+            <!-- Modal de Confirmación para eliminar un gasto -->
+            <div id="confirmDeleteExpenseModal" class="modal">
+                <div class="modal-CONF">
+                    <span class="close" onclick="closeDeleteExpenseModal()">&times;</span>
+                    <p id="deleteExpenseMessage">¿Estás seguro de que deseas eliminar este gasto?</p>
+                    <button id="confirmDeleteYesButton">Sí</button>
+                    <button id="confirmDeleteNoButton">Cancelar</button>
+                </div>
+            </div>
+
+
+
+
+            <!-- Agrega este div para mostrar los resultados de la venta -->
+        <div id="results"></div>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+</html>

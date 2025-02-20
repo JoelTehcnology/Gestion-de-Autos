@@ -1,0 +1,68 @@
+body {
+    background-image: url('/images/LAMBO.jpg'); /* Ruta de la imagen */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.0); /* Fondo blanco con transparencia */
+}
+
+#loginForm input.form-control-user {
+    font-size: 18px !important; /* Ajusta el tamaño del texto */
+   
+}
+
+
+
+/* Media Query para pantallas de iPhone 15 (430px de ancho) */
+@media only screen and (max-width: 430px) {
+    .custom-alert { 
+        font-size: 0.9rem !important; /* Reducir el tamaño del texto para pantallas más pequeñas */
+        padding-left: 5px !important; /* Ajustar el padding a la izquierda para pantallas más pequeñas */
+    }
+    #loginForm .btn-user {
+        width: 240px !important;;/* Ajusta el ancho del botón */
+        margin: 0 auto; /* Centra el botón */
+        display: block; /* Asegura que el botón sea un bloque */
+    }
+}
+
+.custom-alert { 
+    display: none;
+    font-size: 1rem !important; /* Tamaño del texto */
+    background-color: rgba(209, 14, 14, 0.397); /* Fondo blanco con 50% de opacidad */
+    color: #c6fd00; /* Color del texto */
+    font-weight: 800; /* Grosor de la fuente (negrita más fuerte) */
+    padding-left: 59px !important; /* Mueve el texto ligeramente a la derecha */
+    padding-top: 10px; 
+}
+
+.custom-alert .ico {
+    font-size: 1.9rem !important; /* Tamaño del icono */
+    margin-right: 10px !important; /* Espaciado entre el icono y el texto */
+    color: #ffbc04 !important; /* Color del icono (amarillo en este caso) */
+}
+.custom-alert .close {
+    display: none; /* Oculta la X de cierre */
+}
+#loginForm .btn-user {
+    width: 300px; /* Ajusta el ancho del botón */
+    margin: 0 auto; /* Centra el botón */
+    display: block; /* Asegura que el botón sea un bloque */
+}
+
+@media (max-width: 438px) {
+
+    .custom-alert { 
+        display: none;
+        font-size: 1rem !important; /* Tamaño del texto */
+        background-color: rgba(209, 14, 14, 0.397); /* Fondo blanco con 50% de opacidad */
+        color: #c6fd00; /* Color del texto */
+        font-weight: 800; /* Grosor de la fuente (negrita más fuerte) */
+        padding-left: 30px !important; /* Mueve el texto ligeramente a la derecha */
+        padding-top: 10px; 
+    }
+
+}

@@ -1,0 +1,17 @@
+# Ignorar la carpeta de dependencias
+node_modules/
+
+# Ignorar el archivo de configuración de variables de entorno
+.env
+
+# Ignorar archivos de log
+*.log
+
+# Ignorar archivos de caché de npm
+npm-debug.log*
+
+# Ignorar archivos generados por el sistema
+.DS_Store
+Thumbs.db
+
+.codegpt
